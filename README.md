@@ -1,16 +1,9 @@
-# musicverse
+# MusicVerse 📀
 
-A new Flutter project.
+This will be the MusicVerse GitHub repository
 
-## Getting Started
+## Idea
 
-This project is a starting point for a Flutter application.
+This project is a starting point for an educational application that will allow you to learn as many possible things about music, from learning to play an instrument to the musical theory.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**updates soon**
