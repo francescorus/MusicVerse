@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicverse/app/src/features/auth/signup_screen.dart';
 import 'package:musicverse/app/src/features/home/home_screen.dart';
 import 'package:musicverse/app/src/features/auth/login_screen.dart';
 
@@ -14,6 +15,7 @@ class MusicVerse extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
+        '/signup': (context) => SignupScreen(),
       },
     );
   }

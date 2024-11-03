@@ -2,11 +2,69 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // working progress...
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
 
-class LoginScreen extends StatelessWidget {
+class _LoginScreenState extends State<LoginScreen>
+    with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  late AnimationController _blueController;
+  late Animation<double> _opacityAnimationBlue;
+
+  late AnimationController _orangeController; // Controller per il primo SVG
+  late Animation<double> _opacityAnimationOrange;
+
+  late Animation<Offset> _slideAnimation;
+  @override
+  void initState() {
+    super.initState();
+
+    // Controller e animazione per l'SVG rosso
+    _orangeController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _opacityAnimationOrange = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _orangeController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    // Inizia l'animazione del rosso immediatamente
+    _orangeController.forward();
+
+    // Controller e animazione per l'SVG blu
+    _blueController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _opacityAnimationBlue = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _blueController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    // Ritarda l'inizio dell'animazione del blu di 500 millisecondi
+    Future.delayed(Duration(milliseconds: 800), () {
+      _blueController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _orangeController.dispose();
+    _blueController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +79,28 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               left: -90,
               bottom: 70,
+              //child: SlideTransition(           side transition
+              //  position: _slideAnimation,      side transition
+              child: FadeTransition(
+                opacity: _opacityAnimationBlue,
+                child: Container(
+                  width: 1200,
+                  height: 1200,
+                  child: RotationTransition(
+                    turns: AlwaysStoppedAnimation(-20 / 360),
+                    child: SvgPicture.asset(
+                      'assets/shapes/lightblueshape.svg',
+                    ),
+                  ),
+                ),
+              ),
+              //),                                side transition
+            ),
+
+            //without transition
+            /*Positioned(
+              left: -90,
+              bottom: 70,
               child: Container(
                 width: 1200,
                 height: 1200,
@@ -31,18 +111,21 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            ),*/
             Positioned(
               left: -20,
               bottom: 100,
-              child: Container(
-                width: 1200,
-                height: 1200,
-                child: RotationTransition(
-                  turns: new AlwaysStoppedAnimation(-20 / 360),
-                  child: Container(
-                    child: SvgPicture.asset(
-                      'assets/shapes/blueshape.svg',
+              child: FadeTransition(
+                opacity: _opacityAnimationBlue,
+                child: Container(
+                  width: 1200,
+                  height: 1200,
+                  child: RotationTransition(
+                    turns: new AlwaysStoppedAnimation(-20 / 360),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        'assets/shapes/blueshape.svg',
+                      ),
                     ),
                   ),
                 ),
@@ -51,13 +134,16 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               left: 70,
               bottom: 100,
-              child: Container(
-                width: 1200,
-                height: 1200,
-                child: RotationTransition(
-                  turns: new AlwaysStoppedAnimation(-20 / 360),
-                  child: SvgPicture.asset(
-                    'assets/shapes/aquashape.svg',
+              child: FadeTransition(
+                opacity: _opacityAnimationBlue,
+                child: Container(
+                  width: 1200,
+                  height: 1200,
+                  child: RotationTransition(
+                    turns: new AlwaysStoppedAnimation(-20 / 360),
+                    child: SvgPicture.asset(
+                      'assets/shapes/aquashape.svg',
+                    ),
                   ),
                 ),
               ),
@@ -65,13 +151,16 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               right: -194,
               bottom: 165,
-              child: Container(
-                width: 1300,
-                height: 1300,
-                child: RotationTransition(
-                  turns: new AlwaysStoppedAnimation(-2 / 360),
-                  child: SvgPicture.asset(
-                    'assets/shapes/orangeredshape.svg',
+              child: FadeTransition(
+                opacity: _opacityAnimationOrange,
+                child: Container(
+                  width: 1300,
+                  height: 1300,
+                  child: RotationTransition(
+                    turns: new AlwaysStoppedAnimation(-2 / 360),
+                    child: SvgPicture.asset(
+                      'assets/shapes/orangeredshape.svg',
+                    ),
                   ),
                 ),
               ),
@@ -79,13 +168,16 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               right: -100,
               bottom: 175,
-              child: Container(
-                width: 1300,
-                height: 1300,
-                child: RotationTransition(
-                  turns: new AlwaysStoppedAnimation(-2 / 360),
-                  child: SvgPicture.asset(
-                    'assets/shapes/redshape.svg',
+              child: FadeTransition(
+                opacity: _opacityAnimationOrange,
+                child: Container(
+                  width: 1300,
+                  height: 1300,
+                  child: RotationTransition(
+                    turns: new AlwaysStoppedAnimation(-2 / 360),
+                    child: SvgPicture.asset(
+                      'assets/shapes/redshape.svg',
+                    ),
                   ),
                 ),
               ),
@@ -93,16 +185,19 @@ class LoginScreen extends StatelessWidget {
             Positioned(
               right: 0,
               bottom: 175,
-              child: Container(
-                width: 1300,
-                height: 1300,
-                child: RotationTransition(
-                  turns: new AlwaysStoppedAnimation(-2 / 360),
-                  child: Opacity(
-                    opacity: 0.9,
-                    child: SvgPicture.asset(
-                      color: Colors.yellow,
-                      'assets/shapes/yellowshape.svg',
+              child: FadeTransition(
+                opacity: _opacityAnimationOrange,
+                child: Container(
+                  width: 1300,
+                  height: 1300,
+                  child: RotationTransition(
+                    turns: new AlwaysStoppedAnimation(-2 / 360),
+                    child: Opacity(
+                      opacity: 0.9,
+                      child: SvgPicture.asset(
+                        color: Colors.yellow,
+                        'assets/shapes/yellowshape.svg',
+                      ),
                     ),
                   ),
                 ),
@@ -230,7 +325,9 @@ class LoginScreen extends StatelessWidget {
                           //const Color.fromARGB(255, 212, 212, 212)),
                         ),
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
+                          if (/*_formKey.currentState!.validate()*/
+                              emailController.text == "user" ||
+                                  passwordController.text == "pass") {
                             // Navigate the user to the Home page
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -327,325 +424,27 @@ class LoginScreen extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 4.5),
-                          child: const Text(
-                            'Sign up',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 0, 68, 124),
-                                fontWeight: FontWeight.w800),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/signup');
+                            },
+                            child: const Text(
+                              'Sign up',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 68, 124),
+                                  fontWeight: FontWeight.w800),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-
-                  // ---------------------------------- old style
-
-                  /*Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 0.0),
-                    child: Center(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(Colors.blue),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            // Navigate the user to the Home page
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Please fill input')),
-                            );
-                          }
-                        },
-                        child: const Text(
-                          'Register',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ),
-                  ),*/
-
-                  /*Container(
-                    height: 5,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      fit: StackFit.loose,
-                      alignment: Alignment.center,
-                      //alignment: Alignment.center,
-                      children: [],
-                    ),
-                  ),*/
                 ],
               ),
             ),
           ],
         ),
       ),
-
-      /*body: Column(
-        //mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity, // Assegna larghezza al contenitore
-            height: 400,
-            child: Stack(
-              clipBehavior: Clip.none,
-              fit: StackFit.loose,
-              alignment: Alignment.center,
-              //alignment: Alignment.center,
-              children: [
-                Positioned(
-                  left: 70,
-                  top: -115,
-                  child: Container(
-                    width: 500,
-                    height: 500,
-                    child: SvgPicture.asset(
-                      'assets/shapes/blobblue.svg',
-                      /*fit: BoxFit
-                          .cover, // Mantieni l'immagine nella dimensione fissa
-                    */
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 90,
-                  top: -120,
-                  child: Container(
-                    width: 500,
-                    height: 500,
-                    child: SvgPicture.asset(
-                      'assets/shapes/bloborange.svg',
-                      /*fit: BoxFit
-                          .cover, // Mantieni l'immagine nella dimensione fissa
-                      */
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 140,
-                  child: Text(
-                    "MusicVerse",
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      color: Colors.black,
-                      fontSize: 45,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          //-----------------Form
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color:
-                        Colors.white, // Sfondo solido per evitare trasparenza
-                    borderRadius:
-                        BorderRadius.circular(40), // Bordo arrotondato
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(
-                            0.25), // Colore dell'ombra con opacità regolata
-                        spreadRadius: 0.5, // Espansione dell'ombra
-                        blurRadius:
-                            8, // Sfocatura dell'ombra per un effetto più morbido
-                        offset: Offset(0, 4), // Posizione dell'ombra
-                      ),
-                    ],
-                  ),
-                  child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                        floatingLabelStyle: TextStyle(
-                          color: Color.fromARGB(255, 255, 191,
-                              0), // Colore della label quando il campo è attivo
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(40.0)),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 255, 191,
-                                0), // Colore del bordo quando è attivo
-                            width: 2.0, // Larghezza del bordo
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(40.0)),
-                        ),
-                        labelText: "Email or username"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8, right: 8, bottom: 16, top: 16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color:
-                        Colors.white, // Sfondo solido per evitare trasparenza
-                    borderRadius:
-                        BorderRadius.circular(40), // Bordo arrotondato
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(
-                            0.25), // Colore dell'ombra con opacità regolata
-                        spreadRadius: 0.5, // Espansione dell'ombra
-                        blurRadius:
-                            8, // Sfocatura dell'ombra per un effetto più morbido
-                        offset: Offset(0, 4), // Posizione dell'ombra
-                      ),
-                    ],
-                  ),
-                  child: TextFormField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                        floatingLabelStyle: TextStyle(
-                          color: Colors
-                              .blue, // Colore della label quando il campo è attivo
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(40.0)),
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 0, 157,
-                                255), // Colore del bordo quando è attivo
-                            width: 2.0, // Larghezza del bordo
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(40.0)),
-                        ),
-                        labelText: "Password"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8, right: 8, top: 16, bottom: 16),
-                child: Center(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll<Color>(
-                          const Color.fromARGB(255, 212, 212, 212)),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Navigate the user to the Home page
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please fill input')),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Log in',
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
-              ),
-              /*Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 0.0),
-                child: Center(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll<Color>(Colors.blue),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Navigate the user to the Home page
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please fill input')),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w800),
-                    ),
-                  ),
-                ),
-              ),*/
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 0.0),
-                child: const Text(
-                  'Register',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
-                width: double.infinity, // Assegna larghezza al contenitore
-                height: 5,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  fit: StackFit.loose,
-                  alignment: Alignment.center,
-                  //alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      left: 10,
-                      top: -70,
-                      child: Container(
-                        width: 660,
-                        height: 660,
-                        child: SvgPicture.asset(
-                          'assets/shapes/bloborange.svg',
-                          /*fit: BoxFit
-                          .cover, // Mantieni l'immagine nella dimensione fissa
-                    */
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 110,
-                      top: -20,
-                      child: Container(
-                        width: 560,
-                        height: 560,
-                        child: SvgPicture.asset(
-                          'assets/shapes/blobblue.svg',
-                          /*fit: BoxFit
-                          .cover, // Mantieni l'immagine nella dimensione fissa
-                      */
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),*/
     );
   }
 }
